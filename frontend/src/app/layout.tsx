@@ -21,13 +21,14 @@ import { usePathname } from 'next/navigation'
 function LayoutContent({ children }: { children: ReactNode }) {
     const pathname = usePathname()
     const isAuthPage = pathname === '/auth'
+    const isLandingPage = pathname === '/'
 
-    const { showToast } = useApp()
+    const { showToast, isAuthenticated } = useApp()
 
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
-    // Don't show sidebar/topbar on auth page
-    if (isAuthPage) {
+    // Don't show sidebar/topbar on auth page or landing page (for non-authenticated users)
+    if (isAuthPage || (isLandingPage && !isAuthenticated)) {
         return <div className="h-screen bg-white">{children}</div>
     }
 

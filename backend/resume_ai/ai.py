@@ -34,7 +34,7 @@ async def extract_data_from_pdf(file_content: bytes) -> dict:
     # 2. Setup LLM and Prompt
     # Using gpt-4o for better extraction quality, fallback to gpt-3.5-turbo if needed
     llm = ChatOpenAI(
-        model="gpt-4o", 
+        model="gpt-5-mini", 
         api_key=settings.openai_api_key,
         temperature=0
     )
