@@ -26,6 +26,9 @@ export interface BackendTask {
     updated_at: string
     room_id?: number
     assignments: TaskAssignment[]
+    estimated_hours?: number
+    complexity_score?: number
+    due_date?: string
 }
 
 export interface TaskStatistics {
@@ -44,6 +47,8 @@ export interface Task {
     assignee: string
     complexity: 'Low' | 'Medium' | 'High'
     status: 'To Do' | 'In Progress' | 'Review' | 'Done'
+    estimated_hours?: number
+    complexity_score?: number
 }
 
 export interface PipelineStep {
@@ -76,6 +81,7 @@ export interface EmployeeViewProps {
 
 export interface TaskCardProps {
     task: Task
+    onClick?: () => void
 }
 
 export interface ToastProps {

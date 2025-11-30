@@ -15,11 +15,12 @@ const complexityColors: Record<string, string> = {
     'High': 'border-zinc-600 text-zinc-900',
 }
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function TaskCard({ task, onClick }: TaskCardProps) {
     const { title, tag, assignee, complexity } = task
 
     return (
         <motion.div
+            onClick={onClick}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -2 }}
@@ -47,10 +48,23 @@ export default function TaskCard({ task }: TaskCardProps) {
                     </div>
                 </div>
 
-                {/* Complexity Badge */}
-                <span className={`text-xs font-medium px-2 py-0.5 rounded border ${complexityColors[complexity] || 'border-zinc-300 text-zinc-600'}`}>
-                    {complexity}
-                </span>
+                <div className="flex items-center gap-2">
+                    {/* Estimated Hours */}
+                    {task.estimated_hours && (
+                        <div className="flex items-center gap-1 text-xs text-zinc-500" title="Estimated hours">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            {task.estimated_hours}h
+                        </div>
+                    )}
+
+                    {/* Complexity Badge */}
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded border ${complexityColors[complexity] || 'border-zinc-300 text-zinc-600'}`}>
+                        {task.complexity_score ? `${task.complexity_score}/10` : complexity}
+                    </span>
+                </div>
             </div>
         </motion.div>
     )

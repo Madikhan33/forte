@@ -57,6 +57,8 @@ class TaskBase(BaseModel):
     priority: TaskPriority = TaskPriority.MEDIUM
     due_date: Optional[datetime] = None
     room_id: Optional[int] = None
+    estimated_hours: Optional[float] = None
+    complexity_score: Optional[int] = None
 
 
 class TaskCreate(TaskBase):
@@ -96,6 +98,8 @@ class TaskUpdate(BaseModel):
     status: Optional[TaskStatus] = None
     priority: Optional[TaskPriority] = None
     due_date: Optional[datetime] = None
+    estimated_hours: Optional[float] = None
+    complexity_score: Optional[int] = None
 
 
 class TaskResponse(TaskBase):

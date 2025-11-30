@@ -250,7 +250,9 @@ async def apply_task_breakdown(
             status=TaskStatus.TODO,
             priority=priority_map.get(subtask.get("priority", "medium"), TaskPriority.MEDIUM),
             created_by_id=current_user.id,
-            due_date=due_date  # Set deadline from AI suggestion
+            due_date=due_date,  # Set deadline from AI suggestion
+            estimated_hours=subtask.get("estimated_hours"),
+            complexity_score=subtask.get("complexity_score")
         )
         
         db.add(new_task)

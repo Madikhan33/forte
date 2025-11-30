@@ -20,8 +20,9 @@ import AddMemberModal from '@/components/AddMemberModal'
 import CreateTaskModal from '@/components/CreateTaskModal'
 import KanbanBoard from '@/components/KanbanBoard'
 import AIAssistantModal from '@/components/ai/AIAssistantModal'
+import TaskDetailModal from '@/components/TaskDetailModal'
 import { roomsApi, authApi } from '@/services/api'
-import { Room, RoomMember, User } from '@/types'
+import { Room, RoomMember, User, BackendTask } from '@/types'
 
 interface PageProps {
     params: {
@@ -40,6 +41,7 @@ export default function RoomDetailPage({ params }: PageProps) {
     const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false)
     const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false)
     const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false)
+    const [selectedTask, setSelectedTask] = useState<BackendTask | null>(null)
     const [taskStatus, setTaskStatus] = useState('todo')
     const [activeTab, setActiveTab] = useState<'tasks' | 'members'>('tasks')
     const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -196,6 +198,7 @@ export default function RoomDetailPage({ params }: PageProps) {
                 {activeTab === 'tasks' ? (
                     <KanbanBoard
                         onCreateTask={handleCreateTask}
+                        onTaskClick={setSelectedTask}
                         roomId={roomId}
                         refreshTrigger={refreshTrigger}
                     />
@@ -278,6 +281,11 @@ export default function RoomDetailPage({ params }: PageProps) {
                 onTasksCreated={() => {
                     setRefreshTrigger(prev => prev + 1)
                 }}
+            />
+
+            <TaskDetailModal
+                task={selectedTask}
+                onClose={() => setSelectedTask(null)}
             />
         </div>
     )

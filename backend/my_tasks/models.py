@@ -1,7 +1,7 @@
 from core.database import Base
 from datetime import datetime
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean, Text, Enum
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean, Text, Enum, Float
 import enum
 
 
@@ -83,6 +83,10 @@ class Task(Base):
     )
     due_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    
+    # AI-generated fields
+    estimated_hours: Mapped[float | None] = mapped_column(Float, nullable=True)
+    complexity_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     
     # Relationships
     created_by: Mapped["User"] = relationship("User", foreign_keys=[created_by_id], back_populates="created_tasks")

@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import TaskCard from './TaskCard'
-import { EmployeeViewProps } from '@/types'
+import TaskDetailModal from './TaskDetailModal'
+import { EmployeeViewProps, Task } from '@/types'
 
 interface Column {
     id: 'To Do' | 'In Progress' | 'Review' | 'Done'
@@ -16,6 +18,8 @@ const columns: Column[] = [
 ]
 
 export default function EmployeeView({ tasks }: EmployeeViewProps) {
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+
     const getTasksByStatus = (status: Column['id']) => {
         return tasks.filter(task => task.status === status)
     }
@@ -54,7 +58,11 @@ export default function EmployeeView({ tasks }: EmployeeViewProps) {
                             <div className="space-y-3 flex-1">
                                 {columnTasks.length > 0 ? (
                                     columnTasks.map((task) => (
-                                        <TaskCard key={task.id} task={task} />
+                                        <TaskCard
+                                            key={task.id}
+                                            task={task}
+                                            onClick={() => setSelectedTask(task)}
+                                        />
                                     ))
                                 ) : (
                                     <div className="border-2 border-dashed border-zinc-200 rounded-lg p-6 text-center">
@@ -66,6 +74,12 @@ export default function EmployeeView({ tasks }: EmployeeViewProps) {
                     )
                 })}
             </div>
+
+            {/* Task Detail Modal */}
+            <TaskDetailModal
+                task={selectedTask}
+                onClose={() => setSelectedTask(null)}
+            />
         </div>
     )
 }

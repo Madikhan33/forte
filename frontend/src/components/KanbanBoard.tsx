@@ -14,18 +14,23 @@ const columns = {
 
 interface KanbanBoardProps {
     onCreateTask?: (status: string) => void
+    onTaskClick?: (task: BackendTask) => void
     roomId?: number
     refreshTrigger?: number
     onlyMyTasks?: boolean
 }
 
-export default function KanbanBoard({ onCreateTask, roomId, refreshTrigger, onlyMyTasks }: KanbanBoardProps = {}) {
+export default function KanbanBoard({ onCreateTask, onTaskClick, roomId, refreshTrigger, onlyMyTasks }: KanbanBoardProps = {}) {
     const [tasks, setTasks] = useState<BackendTask[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         fetchTasks()
     }, [roomId, refreshTrigger, onlyMyTasks])
+
+    // ... (rest of the component)
+
+
 
     const fetchTasks = async () => {
         try {
@@ -166,7 +171,8 @@ export default function KanbanBoard({ onCreateTask, roomId, refreshTrigger, only
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        className={`bg-white p-4 rounded-lg border border-zinc-200 shadow-sm hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing ${snapshot.isDragging ? 'shadow-lg ring-2 ring-black rotate-1' : ''
+                                                        onClick={() => onTaskClick?.(task)}
+                                                        className={`bg-white p-4 rounded-lg border border-zinc-200 shadow-sm hover:shadow-md transition-shadow group cursor-pointer active:cursor-grabbing ${snapshot.isDragging ? 'shadow-lg ring-2 ring-black rotate-1' : ''
                                                             }`}
                                                     >
                                                         <div className="flex items-start justify-between mb-2">
@@ -184,9 +190,17 @@ export default function KanbanBoard({ onCreateTask, roomId, refreshTrigger, only
                                                             </p>
                                                         )}
                                                         <div className="flex items-center justify-between mt-3 pt-3 border-t border-zinc-100">
-                                                            <div className="flex items-center gap-1 text-xs text-zinc-400">
-                                                                <Clock className="w-3 h-3" />
-                                                                {new Date(task.created_at).toLocaleDateString()}
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="flex items-center gap-1 text-xs text-zinc-400">
+                                                                    <Clock className="w-3 h-3" />
+                                                                    {task.estimated_hours ? `${task.estimated_hours}h` : new Date(task.created_at).toLocaleDateString()}
+                                                                </div>
+
+                                                                {task.complexity_score && (
+                                                                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded border border-zinc-200 text-zinc-600 bg-zinc-50">
+                                                                        {task.complexity_score}/10
+                                                                    </span>
+                                                                )}
                                                             </div>
 
                                                             {/* Assignees Display */}
